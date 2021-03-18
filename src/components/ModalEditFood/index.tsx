@@ -5,14 +5,33 @@ import { Form } from './styles';
 import Modal from '../Modal';
 import Input from '../Input';
 
-class ModalEditFood extends Component {
-  constructor(props) {
+interface ModalEditFoodProps {
+  setIsOpen: () => void;
+  isOpen: boolean;
+  handleUpdateFood: (data: IFormData) => void;
+  editingFood: any;
+}
+
+interface IFormData {
+  id: number;
+  available: boolean;
+  description: string;
+  image: string;
+  name: string;
+  price: string;
+}
+
+class ModalEditFood extends Component<ModalEditFoodProps, {formRef: any}> {
+  constructor(props: ModalEditFoodProps) {
     super(props);
 
-    this.formRef = createRef()
+    this.state = {
+      formRef: createRef<any>()
+    };
+
   }
 
-  handleSubmit = async (data) => {
+  handleSubmit = async (data: IFormData) => {
     const { setIsOpen, handleUpdateFood } = this.props;
 
     handleUpdateFood(data);
@@ -21,10 +40,11 @@ class ModalEditFood extends Component {
 
   render() {
     const { isOpen, setIsOpen, editingFood } = this.props;
+    const { formRef } = this.state;
 
     return (
       <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-        <Form ref={this.formRef} onSubmit={this.handleSubmit} initialData={editingFood}>
+        <Form ref={formRef} onSubmit={this.handleSubmit} initialData={editingFood}>
           <h1>Editar Prato</h1>
           <Input name="image" placeholder="Cole o link aqui" />
 
